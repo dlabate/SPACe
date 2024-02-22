@@ -9,7 +9,7 @@ It uses a novel method to match the segmentation of nucleus and cytoplasm, then 
 
 SPACe is fast, ~10X faster than [Cellprofiler](https://github.com/CellProfiler/CellProfiler), using a reasonably standard desktop and not using any cloud computing resources. It takes about 6-9 hours to analyze a full 384-well plate (~17000 2000X2000 pixel images) via pytorch/GPU as well as CPU-Multiprocessing for speedup.  The output is based on single cell data and is provided as canonical well-based summary statistics (mean, median) and as earth mover’s distance measurements of each well to a DMSO control reference distribution.  
 
-**[Image Analysis Steps]**
+**Image Analysis Steps**
 
 ![Image Description](https://github.com/dlabate/SPACe/raw/main/figures/image%20analysis%20steps.png)
 
