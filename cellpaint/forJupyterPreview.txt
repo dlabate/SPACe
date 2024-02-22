@@ -1,7 +1,0 @@
-jupyter-notebook --notebook-dir="C:\Users\u243254\PycharmProjects\cellpaint"
-
-_segmentation.py
-	line 68 - "gpu=True"
-	1.9856142874558766 hours
-
-	line 68 - "gpu=False"
