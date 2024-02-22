@@ -9,6 +9,16 @@ It uses a novel method to match the segmentation of nucleus and cytoplasm, then 
 
 SPACe is fast, ~10X faster than [Cellprofiler](https://github.com/CellProfiler/CellProfiler), using a reasonably standard desktop and not using any cloud computing resources. It takes about 6-9 hours to analyze a full 384-well plate (~17000 2000X2000 pixel images) via pytorch/GPU as well as CPU-Multiprocessing for speedup.  The output is based on single cell data and is provided as canonical well-based summary statistics (mean, median) and as earth mover’s distance measurements of each well to a DMSO control reference distribution.  
 
+**[Image Analysis Steps]**
+
+![Image Description](https://github.com/dlabate/SPACe/raw/main/figures/image%20analysis%20steps.png)
+
+1) Preview (Check and decide how happy you are with your segmentation on a few wells!)
+2) Segmentation Step 1 (Segmenting nucleus and cell)
+3) Segmentation Step 2 (Matching nucleus and cell segmentation as well as segmenting nucleoli and mitchondria)
+4) Light-weight Feature extraction: Shape, Intensity, and Texture Features
+5) Calcultes the Wassertein-Distance Map of each biological-well from the DMSO/Vehicle condition.
+
 ## **Installation instructions**
 
 If you do not have anaconda installed on your computer, the first step is to install anaconda3 as follows:  
