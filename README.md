@@ -64,10 +64,13 @@ To install SPACe python package on a conda virtualenv called tensors:
    	one to edit the program.
   
 All the required packages will be installed automatically from ``` setup.py ``` file.
-If you are going to use Pycharm, its terminal might not recognize your anaconda3 virtualenv. Here is the fix from 
+If you are going to use Pycharm, its terminal might not recognize your anaconda3 virtualenv. 
+Here is the fix from 
 ``` https://stackoverflow.com/questions/48924787/pycharm-terminal-doesnt-activate-conda-environment ```.
 If the pycharm terminal does not recognize your anaconda virtualenv, do the following:
+
 Go to ``` File -> Settings -> Tools -> Terminal ```. Replace the value in ``` Shell path ``` with ``` cmd.exe "/K" path_to_your_miniconda3\Scripts\activate.bat tensors ```.
+
 Remember, you will be able to modify the content of this package only if you install it via Option 2).
 
 
