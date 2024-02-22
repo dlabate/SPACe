@@ -46,20 +46,23 @@ To install SPACe python package on a conda virtualenv called tensors:
   conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
 ```
 5.
-   **Option 1)**
-  To install SPACe directly from github:
-  ``` pip install git+https://github.com/dlabate/SPACe.git ```
-  **Option 2)**
-  To install SPACe locally on your computer and in order to be able to edit it, first download it from github to your computer, go to one directory above where your SPACe folder is
-  downloaded/located/saved, through an anaconda3 terminal, the structure of the directory would look like this:
-  ```
-  dir/
-   cellpaint/
-            setup.py
-            README.md
-            cellpaint
-  ```
-type ``` pip install -e cellpaint ``` in the same terminal. The -e allows one to edit the program.
+     **Option 1)**
+    To install SPACe directly from github:
+    ``` pip install git+https://github.com/dlabate/SPACe.git ```
+  
+    **Option 2)**
+    To install SPACe locally on your computer and in order to be able to edit it, first download it from github to your computer, go to one directory above where your SPACe folder is
+    downloaded/located/saved, through an anaconda3 terminal, the structure of the directory would look like this:
+    ```
+    dir/
+     cellpaint/
+              setup.py
+              README.md
+              cellpaint
+    ```
+    type ```pip install -e cellpaint``` in the same terminal. The ```-e``` allows
+   	one to edit the program.
+  
 All the required packages will be installed automatically from ``` setup.py ``` file.
 If you are going to use Pycharm, its terminal might not recognize your anaconda3 virtualenv. Here is the fix from 
 ``` https://stackoverflow.com/questions/48924787/pycharm-terminal-doesnt-activate-conda-environment ```.
