@@ -55,12 +55,12 @@ To install SPACe python package on a conda virtualenv called tensors:
     downloaded/located/saved, through an anaconda3 terminal, the structure of the directory would look like this:
     ```
     dir/
-     cellpaint/
-              setup.py
-              README.md
-              cellpaint
+     SPACe/
+          setup.py
+          README.md
+          SPACe
     ```
-    type ```pip install -e cellpaint``` in the same terminal. The ```-e``` allows
+    type ```pip install -e SPACe``` in the same terminal. The ```-e``` allows
    	one to edit the program.
   
 All the required packages will be installed automatically from ``` setup.py ``` file.
