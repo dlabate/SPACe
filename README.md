@@ -30,7 +30,7 @@ If you do not have anaconda installed on your computer, the first step is to ins
   6.	Advanced Options (Optional): You may have the option to add Anaconda to your system PATH environment variable, which can make it easier to use from the command line. This is typically recommended.
   7.	Install: Click the "Install" button to begin the installation process.
   8.	Complete Installation: Once the installation is complete, you may be prompted to install Visual Studio Code (VS Code) or PyCharm. You can choose to install them or skip this step if you prefer.
-  9.	Verify Installation: Open a terminal or command prompt and type “conda --version" to verify that Anaconda has been installed correctly. You should see the version number of Anaconda displayed.
+  9.	Verify Installation: Open a terminal or command prompt and type ```conda --version``` to verify that Anaconda has been installed correctly. You should see the version number of Anaconda displayed.
 
 To install SPACe python package on a conda virtualenv called tensors:
 
