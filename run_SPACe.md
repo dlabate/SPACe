@@ -4,10 +4,13 @@
 and is in the same directory as your ```experiment_path``` which is the path to your images/experiment folder.
 
 2) Then modify the ```args``` python variable. 
-The ```args``` variable is a namespace python object that holds all the user input/hyperparamter information. 
+The ```args``` variable is a namespace python object that holds all the user input/hyperparamter information.
+
+A Google Colab version is designed for testing the software under different hyperparameter settings.
+[![Open Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://github.com/dlabate/SPACe/blob/main/SPACe_colab.ipynb) 
+
 To learn more about its available keys/fields/options go to ```cellpaint/steps_single_plate/step0_args.py```
-After making sure all the necessary adjustments are made to the ```args``` Namespace, and your also satisfied
-with segmentation on a few images using ```preview.ipynb```.
+After making sure all the necessary adjustments are made to the ```args``` Namespace.
 Copy your own ```set_custom_datasets_hyperparameters``` into ```main.py```:
 ```
 
@@ -27,8 +30,10 @@ def set_custom_datasets_hyperparameters(args):
     args.w5_intensity_bounds = (5, 99.95)
     ##########################################################################
     # background correction hyperparameters
-    # Set args.bg_sub to True first,
-    # if you decide to do background subtraction.
+    # Set args.bg_sub to True first.
+    # If you decide to do background subtraction, the code applies a morphological top-hat operation to
+    # the image by using  an elliptical-shaped kernel. The size can be set for each channel by modifying
+    # args.w1_bg_rad and so on. 
     args.bg_sub = False
     args.w1_bg_rad = 50
     args.w2_bg_rad = 100
@@ -38,6 +43,7 @@ def set_custom_datasets_hyperparameters(args):
     #######################################################################
     # image channels order/index 
     # defined during data acquisition set by the investigator/microscope
+    # this allows users to change the channel order depending on how the experiment was imaged
     args.nucleus_idx = 0
     args.cyto_idx = 1
     args.nucleoli_idx = 2
@@ -45,36 +51,28 @@ def set_custom_datasets_hyperparameters(args):
     args.mito_idx = 4
     #######################################################################
     # hyperparameters/constants used in Cellpaint Step 2
-    #options for args.step2_segmentation_algorithm are:
+    # this allows users to choose segmentation method 
+    # options for args.step2_segmentation_algorithm are:
 	# 1) "w1=cellpose_w2=cellpose"
 	# 2) "w1=pycle_w2=pycle"
 	# 3) "w1=cellpose_w2=pycle"
 	# 4) "w1=pycle_w2=cellpose"
     args.step2_segmentation_algorithm = "w1=cellpose_w2=cellpose"
+    # this allows users to define the minimum diameter of nucleus and cells 
     args.cellpose_nucleus_diam = 100
     args.cellpose_cyto_diam = 100
     args.cellpose_batch_size = 64
     args.cellpose_model_type = "cyto2"
-    # define the minimum size of segmented objects in each channel
+    # this allows users to define the minimum size of segmented objects in each channel
     args.w1_min_size = 600
     args.w2_min_size = 700
     args.w3_min_size = 40
     args.w5_min_size = 200
     #######################################################
     # hyperparameters/constants used in Cellpaint Step 3
-    ############################################
-    # args.multi_nucleus_dist_thresh decides 
-    # whether to break down a multi-nucleus cyto mask,
-    # into individual cyto masks,
-    # based on avg-pairwise distance of all the nucleus
-    # inside that cytoplasm
-    args.multi_nucleus_dist_thresh = 40
-    #######################################
+    # this allows users to define the minimum and maximum allowable size for segmented nucleoli
     args.min_nucleoli_size_multiplier = .005
     args.max_nucleoli_size_multiplier = .3
-    args.nucleoli_bd_area_to_nucleoli_area_threshold = .2
-    args.w3_local_rescale_intensity_ub = 99.2
-    args.w5_local_rescale_intensity_ub = 99.9
     return args
 ```
 3) Modify ```main.py``` by setting in your own ```experiment_path```, ```experiment_folder```.
@@ -122,8 +120,8 @@ def main_worker(args):
         step5.step5_main_run_loop()
 
 if __name__ == "__main__":
-    experiment_path = WindowsPath(r"path_to_your_experiment_folder_excluding_the_experiment_folder_itself")
-    experiment_folder = WindowsPath(r"your_experiment_folder")
+    experiment_path = Path(r"path_to_your_experiment_folder_excluding_the_experiment_folder_itself")
+    experiment_folder = Path(r"your_experiment_folder")
     # entry point of the program is creating the necessary args
     start_time = time.time()
     args = Args(experiment=experiment_folder, main_path=experiment_path, mode="full").args  # mode="preview"
@@ -218,8 +216,7 @@ def sort_key_for_imgs(file_path, sort_purpose, plate_protocol):
 Those metadata keys/values/fields are:
 ```
 folder: The name of the image folder containing your tiff files
-filename: the name of the tiff file which should be passed in as a WindowsPath/PosixPath object 
-if you are using Windows/Linux respectively.  
+filename: the name of the tiff file which should be passed in as a Path object  
 well_id: The image filename should contain the well-id of that plate where the image tiff file is taken from.
 fov: The image should contain the fov of that well where the image tiff file is taken from.
 channel: Which die/channel does the image correspond to, for example:
