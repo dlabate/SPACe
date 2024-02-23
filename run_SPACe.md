@@ -2,7 +2,7 @@
 
 1) make sure the platemap excel file is filled-in properly,
 and is in the same directory as your ```experiment_path``` which is the path to your images/experiment folder.
-You can find the template of the platemap [here](https://github.com/dlabate/SPACe/blob/main/cellpaint/platemap_template.xlsx)
+You can find the plate map Excel template [here](https://github.com/dlabate/SPACe/blob/main/cellpaint/platemap_template.xlsx)
 
 3) Then modify the ```args``` python variable. 
 The ```args``` variable is a namespace python object that holds all the user input/hyperparamter information.
