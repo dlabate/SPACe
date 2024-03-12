@@ -72,7 +72,7 @@ class SegmentationPartI:
         """self.N is the total number of images (when all their channels are grouped together) in the
         args.main_path\args.experiment\args.plate_protocol folder."""
         self.args = args
-        self.cellpose_model = models.Cellpose(gpu=True, model_type=self.args.cellpose_model_type, net_avg=False)
+        self.cellpose_model = models.Cellpose(gpu=True, model_type=self.args.cellpose_model_type)
 
         if self.args.mode == "preview":
             self.save_path = self.args.main_path / self.args.experiment / f"Step0_MasksP1-Preview"
