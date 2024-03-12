@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Mar 12 15:07:26 2024
+
+@author: mikin
+"""
+
 import os
 import time
 from tqdm import tqdm
@@ -65,7 +72,7 @@ class SegmentationPartI:
         """self.N is the total number of images (when all their channels are grouped together) in the
         args.main_path\args.experiment\args.plate_protocol folder."""
         self.args = args
-        self.cellpose_model = models.Cellpose(gpu=True, model_type=self.args.cellpose_model_type)
+        self.cellpose_model = models.Cellpose(gpu=True, model_type=self.args.cellpose_model_type, net_avg=False)
 
         if self.args.mode == "preview":
             self.save_path = self.args.main_path / self.args.experiment / f"Step0_MasksP1-Preview"
@@ -82,68 +89,83 @@ class SegmentationPartI:
         # # stime = time.time()
         # load, rescale/contrast-enhance, and background subtraction the images using the tophat filter!!!
         img = load_img(img_channels_filepaths, self.args)
+        print("img", img.shape)
+        plt.imshow(img[0])
+        plt.show()
+        plt.imshow(img[1])
+        plt.show()
+        exp_id, well_id, fov = img_filename_key[0], img_filename_key[1], img_filename_key[2]
 
-        if self.args.step2_segmentation_algorithm == "w1=cellpose_w2=cellpose":  # recommended
-            # get nucleus and cyto masks using cellpose
-            w1_mask, _, _, _ = self.cellpose_model.eval(
-                img[0],
-                diameter=self.args.cellpose_nucleus_diam,
-                channels=[0, 0],
-                batch_size=self.args.cellpose_batch_size,
-                z_axis=None,
-                channel_axis=None,
-                resample=False,
-                min_size=self.args.min_sizes["w1"],
-            )
-
-            w2_mask, _, _, _ = self.cellpose_model.eval(
-                img[1],
-                diameter=self.args.cellpose_cyto_diam,
-                channels=[0, 0],
-                batch_size=self.args.cellpose_batch_size,
-                z_axis=None,
-                channel_axis=None,
-                resample=False,
-                min_size=self.args.min_sizes["w2"])
-        # # print(f"cellpose w1 takes {time.time()-stime} seconds")
-        ###########################################################################################
-        elif self.args.step2_segmentation_algorithm == "w1=pycle_w2=pycle":
-            # stime = time.time()
-            w1_mask = np.array(cle.voronoi_otsu_labeling(cle.push(img[0]), spot_sigma=10)).astype(np.uint16)
-            w2_mask = cle.voronoi_otsu_labeling(cle.push(img[1]), spot_sigma=8, outline_sigma=1)
-            # w2_mask = cle.minimum_box(cle.maximum_box(w2_mask, radius_x=10, radius_y=10), radius_x=10, radius_y=10)
-            w2_mask = np.array(w2_mask).astype(np.uint16)
-            # print(f"cle voronoi_otsu_labeling on w2 takes {time.time()-stime} seconds")
-
-        elif self.args.step2_segmentation_algorithm == "w1=cellpose_w2=pycle":
-            w1_mask, _, _, _ = self.cellpose_model.eval(
-                img[0],
-                diameter=self.args.cellpose_nucleus_diam,
-                channels=[0, 0],
-                batch_size=self.args.cellpose_batch_size,
-                z_axis=None,
-                channel_axis=None,
-                resample=False, )
-            w2_mask = cle.voronoi_otsu_labeling(cle.push(img[1]), spot_sigma=8, outline_sigma=1)
-            # w2_mask = cle.minimum_box(cle.maximum_box(w2_mask, radius_x=10, radius_y=10), radius_x=10, radius_y=10)
-            w2_mask = np.array(w2_mask).astype(np.uint16)
-
-        elif self.args.step2_segmentation_algorithm == "w1=pycle_w2=cellpose":
-            w1_mask = cle.voronoi_otsu_labeling(cle.push(img[0]), spot_sigma=8, outline_sigma=1)
-            # w1_mask = cle.minimum_box(cle.maximum_box(w1_mask, radius_x=10, radius_y=10), radius_x=10, radius_y=10)
-            w1_mask = np.array(w1_mask).astype(np.uint16)
-
-            w2_mask, _, _, _ = self.cellpose_model.eval(
-                img[1],
-                diameter=self.args.cellpose_cyto_diam,
-                channels=[0, 0],
-                batch_size=self.args.cellpose_batch_size,
-                z_axis=None,
-                channel_axis=None,
-                resample=False, )
-
+        if len(img_channels_filepaths) < self.args.n_channels:
+            w1_mask = np.zeros((self.args.height, self.args.width), dtype=np.uint16)
+            w2_mask = np.zeros((self.args.height, self.args.width), dtype=np.uint16)
+            print(f"{well_id}  {fov}  image does not have {self.args.n_channels} channels. Skipping segmentation!!!")
         else:
-            raise NotImplementedError()
+
+            if self.args.step2_segmentation_algorithm == "w1=cellpose_w2=cellpose":  # recommended
+                # get nucleus and cyto masks using cellpose
+                w1_mask, _, _, _ = self.cellpose_model.eval(
+                    img[0],
+                    diameter=self.args.cellpose_nucleus_diam,
+                    channels=[0, 0],
+                    batch_size=self.args.cellpose_batch_size,
+                    z_axis=None,
+                    channel_axis=None,
+                    resample=False,
+                    min_size=self.args.min_sizes["w1"],
+                )
+
+                w2_mask, _, _, _ = self.cellpose_model.eval(
+                    img[1],
+                    diameter=self.args.cellpose_cyto_diam,
+                    channels=[0, 0],
+                    batch_size=self.args.cellpose_batch_size,
+                    z_axis=None,
+                    channel_axis=None,
+                    resample=False,
+                    min_size=self.args.min_sizes["w2"])
+            # # print(f"cellpose w1 takes {time.time()-stime} seconds")
+            ###########################################################################################
+            elif self.args.step2_segmentation_algorithm == "w1=pycle_w2=pycle":
+                # stime = time.time()
+                w1_mask = np.array(cle.voronoi_otsu_labeling(cle.push(img[0]), spot_sigma=10)).astype(np.uint16)
+                w2_mask = cle.voronoi_otsu_labeling(cle.push(img[1]), spot_sigma=8, outline_sigma=1)
+                # w2_mask = cle.minimum_box(cle.maximum_box(w2_mask, radius_x=10, radius_y=10),
+                # radius_x=10, radius_y=10)
+                w2_mask = np.array(w2_mask).astype(np.uint16)
+                # print(f"cle voronoi_otsu_labeling on w2 takes {time.time()-stime} seconds")
+
+            elif self.args.step2_segmentation_algorithm == "w1=cellpose_w2=pycle":
+                w1_mask, _, _, _ = self.cellpose_model.eval(
+                    img[0],
+                    diameter=self.args.cellpose_nucleus_diam,
+                    channels=[0, 0],
+                    batch_size=self.args.cellpose_batch_size,
+                    z_axis=None,
+                    channel_axis=None,
+                    resample=False, )
+                w2_mask = cle.voronoi_otsu_labeling(cle.push(img[1]), spot_sigma=8, outline_sigma=1)
+                # w2_mask = cle.minimum_box(cle.maximum_box(w2_mask, radius_x=10, radius_y=10),
+                # radius_x=10, radius_y=10)
+                w2_mask = np.array(w2_mask).astype(np.uint16)
+
+            elif self.args.step2_segmentation_algorithm == "w1=pycle_w2=cellpose":
+                w1_mask = cle.voronoi_otsu_labeling(cle.push(img[0]), spot_sigma=8, outline_sigma=1)
+                # w1_mask = cle.minimum_box(cle.maximum_box(w1_mask, radius_x=10, radius_y=10),
+                # radius_x=10, radius_y=10)
+                w1_mask = np.array(w1_mask).astype(np.uint16)
+
+                w2_mask, _, _, _ = self.cellpose_model.eval(
+                    img[1],
+                    diameter=self.args.cellpose_cyto_diam,
+                    channels=[0, 0],
+                    batch_size=self.args.cellpose_batch_size,
+                    z_axis=None,
+                    channel_axis=None,
+                    resample=False, )
+
+            else:
+                raise NotImplementedError()
 
         if self.args.mode == "test":
             fig, axes = plt.subplots(2, 2, sharex=True, sharey=True)
@@ -158,12 +180,12 @@ class SegmentationPartI:
         return w1_mask, w2_mask
 
     def run_single(self, img_channels_filepaths, img_filename_key):
+        exp_id, well_id, fov = img_filename_key[0], img_filename_key[1], img_filename_key[2]
         w1_mask, w2_mask = self.get_cellpose_masks(img_channels_filepaths, img_filename_key)
         ########################################################################################################
         # Save the masks into disk
         # Create a savename choosing a name for the experiment name, and also using the well_id, and fov.
         # ('2022-0817-CP-benchmarking-density_20220817_120119', 'H24', 'F009')
-        exp_id, well_id, fov = img_filename_key[0], img_filename_key[1], img_filename_key[2]
 
         w1_mask = np.uint16(w1_mask)
         w2_mask = np.uint16(w2_mask)
@@ -207,17 +229,16 @@ class SegmentationPartII:
         if self.args.mode == "preview":
             self.load_path = self.args.main_path / self.args.experiment / f"Step0_MasksP1-Preview"
             self.save_path = self.args.main_path / self.args.experiment / f"Step0_MasksP2-Preview"
-            self.num_workers = self.args.N
         else:
             self.load_path = self.args.main_path / self.args.experiment / f"Step{self.analysis_step-1}_MasksP1"
             self.save_path = self.args.main_path / self.args.experiment / f"Step{self.analysis_step}_MasksP2"
-            self.save_path2 = self.args.main_path / self.args.experiment / f"Step{self.analysis_step}_MasksColor"
         self.save_path.mkdir(exist_ok=True, parents=True)
-        self.save_path2.mkdir(exist_ok=True, parents=True)
 
-        self.w1_mask_filepaths = sorted(self.load_path.rglob("*_W1.png"))
-        self.w2_mask_filepaths = sorted(self.load_path.rglob("*_W2.png"))
+        self.w1_mask_filepaths = list(self.load_path.rglob("*_W1.png"))
+        self.w2_mask_filepaths = list(self.load_path.rglob("*_W2.png"))
 
+        self.num_workers = min(16, mp.cpu_count(), self.args.N)
+        print("self.num_workers", self.num_workers)
         # check matching
 
         if self.args.mode != "preview":
@@ -228,54 +249,26 @@ class SegmentationPartII:
                 assert sort_key_for_imgs(it0[0], "to_get_well_id_and_fov", self.args.plate_protocol) == \
                 sort_key_for_masks(it1) == sort_key_for_masks(it2)
                 # print(it0[0].stem, '\n', it1.stem, '\n', it2.stem, '\n')
-        self.num_workers = min(16, mp.cpu_count(), self.args.N)
+
+            self.num_workers = min(16, mp.cpu_count(), self.args.N)
 
     def run_demo(self, img_group, img, w1_mask, w2_mask):
         well_id, fov = sort_key_for_imgs(img_group[0], "to_get_well_id_and_fov", self.args.plate_protocol)
-        # stime = time.time()
-        w1_mask, w2_mask = self.step1_preprocessing_and_w1w2_label_matching(img, w1_mask, w2_mask)
-        # print(f"step3 finished in {time.time()-stime} seconds")
-        # stime = time.time()
-        w3_mask, w5_mask = self.step2_get_nucleoli_and_mito_masks_v2(img, w1_mask, w2_mask)
-        # fig, axes = plt.subplots(2, 4, sharex=True, sharey=True)
-        # fig.set_size_inches(40, 20)
-        # fig.suptitle(f"well-id={well_id}  fov={fov}")
-        # axes[0, 0].imshow(img[0], cmap="gray")
-        # axes[0, 1].imshow(img[1], cmap="gray")
-        # axes[0, 2].imshow(img[2], cmap="gray")
-        # axes[0, 3].imshow(img[4], cmap="gray")
-        # axes[1, 0].imshow(label2rgb(w1_mask), cmap="gray")
-        # axes[1, 1].imshow(label2rgb(w2_mask), cmap="gray")
-        # axes[1, 2].imshow(label2rgb(w3_mask), cmap="gray")
-        # axes[1, 3].imshow(label2rgb(w5_mask), cmap="gray")
-        # plt.show()
-        return w1_mask, w2_mask, w3_mask, w5_mask
-
-    def run_single(self, index):
-
-        # 0) get image group keys
-        img_group = self.args.img_channels_filepaths[index]
-        _, well_id, fov = self.args.img_filename_keys[index]
-
-        # 1) load image and masks
-        img = load_img(img_group, self.args)
-        w1_mask_path = self.w1_mask_filepaths[index]
-        w2_mask_path = self.w2_mask_filepaths[index]
-
-        w1_mask = cv2.imread(str(w1_mask_path), cv2.IMREAD_UNCHANGED)
-        w2_mask = cv2.imread(str(w2_mask_path), cv2.IMREAD_UNCHANGED)
-
-        # 2) get masks
-        # stime = time.time()
-        w1_mask, w2_mask = self.step1_preprocessing_and_w1w2_label_matching(img, w1_mask, w2_mask)
-        # print(f"step1 finished in {time.time()-stime} seconds")
-        # stime = time.time()
-        w3_mask, w5_mask = self.step2_get_nucleoli_and_mito_masks_v2(img, w1_mask, w2_mask)
-        # print(f"step2-v2 finished in {time.time()-stime} seconds")
-
-        # 3) show
-        if self.show_masks == "test":
+        if len(img_group) < self.args.n_channels:  # image acquisition was not done properly for this image
+            w1_mask = np.zeros((self.args.height, self.args.width), dtype=np.uint16)
+            w2_mask = np.zeros((self.args.height, self.args.width), dtype=np.uint16)
+            w3_mask = np.zeros((self.args.height, self.args.width), dtype=np.uint16)
+            w5_mask = np.zeros((self.args.height, self.args.width), dtype=np.uint16)
+            print(f"{well_id}  {fov}  image does not have {self.args.n_channels} channels. Skipping segmentation!!!")
+        else:
+            # stime = time.time()
+            w1_mask, w2_mask = self.step1_preprocessing_and_w1w2_label_matching(img, w1_mask, w2_mask)
+            # print(f"step3 finished in {time.time()-stime} seconds")
+            # stime = time.time()
+            w3_mask, w5_mask = self.step2_get_nucleoli_and_mito_masks_v2(img, w1_mask, w2_mask)
             fig, axes = plt.subplots(2, 4, sharex=True, sharey=True)
+            fig.set_size_inches(40, 20)
+            fig.suptitle(f"well-id={well_id}  fov={fov}")
             axes[0, 0].imshow(img[0], cmap="gray")
             axes[0, 1].imshow(img[1], cmap="gray")
             axes[0, 2].imshow(img[2], cmap="gray")
@@ -285,6 +278,56 @@ class SegmentationPartII:
             axes[1, 2].imshow(label2rgb(w3_mask), cmap="gray")
             axes[1, 3].imshow(label2rgb(w5_mask), cmap="gray")
             plt.show()
+        return w1_mask, w2_mask, w3_mask, w5_mask
+
+    def run_single(self, index):
+
+        # 0) get image group keys
+        img_group = self.args.img_channels_filepaths[index]
+        _, well_id, fov = self.args.img_filename_keys[index]
+        self.plot_counter = 0
+
+        if len(img_group) < self.args.n_channels:  # image acquisition was not done properly for this image
+            w1_mask = np.zeros((self.args.height, self.args.width), dtype=np.uint16)
+            w2_mask = np.zeros((self.args.height, self.args.width), dtype=np.uint16)
+            w3_mask = np.zeros((self.args.height, self.args.width), dtype=np.uint16)
+            w5_mask = np.zeros((self.args.height, self.args.width), dtype=np.uint16)
+            print(f"{well_id}  {fov}  image does not have {self.args.n_channels} channels. Skipping segmentation!!!")
+
+        else:
+            # 1) load image and masks
+            img = load_img(img_group, self.args)
+            w1_mask_path = self.w1_mask_filepaths[index]
+            w2_mask_path = self.w2_mask_filepaths[index]
+
+            w1_mask = cv2.imread(str(w1_mask_path), cv2.IMREAD_UNCHANGED)
+            w2_mask = cv2.imread(str(w2_mask_path), cv2.IMREAD_UNCHANGED)
+
+            # 2) get masks
+            # stime = time.time()
+            w1_mask, w2_mask = self.step1_preprocessing_and_w1w2_label_matching(img, w1_mask, w2_mask)
+            # print(f"step1 finished in {time.time()-stime} seconds")
+            # stime = time.time()
+            w3_mask, w5_mask = self.step2_get_nucleoli_and_mito_masks_v2(img, w1_mask, w2_mask)
+            # print(f"step2-v2 finished in {time.time()-stime} seconds")
+
+        # 3) show
+        if self.show_masks == "test":
+            fig, axes = fig, axes = plt.subplots(2, 4, figsize=(12, 8), sharex=False, sharey=False)
+            axes[0, 0].imshow(img[0], cmap="gray")
+            axes[0, 1].imshow(img[1], cmap="gray")
+            axes[0, 2].imshow(img[2], cmap="gray")
+            axes[0, 3].imshow(img[4], cmap="gray")
+            axes[1, 0].imshow(label2rgb(w1_mask), cmap="gray")
+            axes[1, 1].imshow(label2rgb(w2_mask), cmap="gray")
+            axes[1, 2].imshow(label2rgb(w3_mask), cmap="gray")
+            axes[1, 3].imshow(label2rgb(w5_mask), cmap="gray")
+            plt.show()
+            
+            self.plot_counter += 1
+
+            # Save the plot to a file with a dynamic name
+            plt.savefig(f'your_plot_{self.plot_counter}.png')
 
         # 4) save
         sio.imsave(self.save_path / set_mask_save_name(well_id, fov, 0), w1_mask, check_contrast=False)
@@ -297,39 +340,54 @@ class SegmentationPartII:
         # well_id, fov = sort_key_for_imgs(
         #     self.args.img_channels_filepaths[index][0],
         #     "to_get_well_id_and_fov", self.args.plate_protocol)
-        _, well_id, fov = self.args.img_filename_keys[index]
-        w1_mask_path = self.w1_mask_filepaths[index]
-        w2_mask_path = self.w2_mask_filepaths[index]
 
-        # 1) Read inputs
-        img = load_img(self.args.img_channels_filepaths[index], self.args)
-        w1_mask = cv2.imread(str(w1_mask_path), cv2.IMREAD_UNCHANGED)
-        w2_mask = cv2.imread(str(w2_mask_path), cv2.IMREAD_UNCHANGED)
+        img_group = self.args.img_channels_filepaths[index]
+        img_filename_key = self.args.img_filename_keys[index]
+        _, well_id, fov = img_filename_key
 
-        # 2) Generate masks
-        w1_mask, w2_mask = self.step1_preprocessing_and_w1w2_label_matching(img, w1_mask, w2_mask)
-        w3_mask, w5_mask = self.step2_get_nucleoli_and_mito_masks_v2(img, w1_mask, w2_mask)
+        if len(img_group) < self.args.n_channels:  # image acquisition was not done properly for this image
+            w1_mask = np.zeros((self.args.height, self.args.width), dtype=np.uint16)
+            w2_mask = np.zeros((self.args.height, self.args.width), dtype=np.uint16)
+            w3_mask = np.zeros((self.args.height, self.args.width), dtype=np.uint16)
+            w5_mask = np.zeros((self.args.height, self.args.width), dtype=np.uint16)
+            print(f"{well_id}  {fov}  image does not have {self.args.n_channels} channels. Skipping segmentation!!!")
 
+        else:
+            w1_mask_path = self.w1_mask_filepaths[index]
+            w2_mask_path = self.w2_mask_filepaths[index]
+
+            # 1) Read inputs
+            img = load_img(img_group, self.args)
+            w1_mask = cv2.imread(str(w1_mask_path), cv2.IMREAD_UNCHANGED)
+            w2_mask = cv2.imread(str(w2_mask_path), cv2.IMREAD_UNCHANGED)
+
+            # 2) Generate masks
+            w1_mask, w2_mask = self.step1_preprocessing_and_w1w2_label_matching(img, w1_mask, w2_mask)
+            w3_mask, w5_mask = self.step2_get_nucleoli_and_mito_masks_v2(img, w1_mask, w2_mask)
+
+        # 3) show
+        if self.show_masks == "test":
+            fig, axes = fig, axes = plt.subplots(2, 4, figsize=(12, 8), sharex=False, sharey=False)
+            axes[0, 0].imshow(img[0], cmap="gray")
+            axes[0, 1].imshow(img[1], cmap="gray")
+            axes[0, 2].imshow(img[2], cmap="gray")
+            axes[0, 3].imshow(img[4], cmap="gray")
+            axes[1, 0].imshow(label2rgb(w1_mask), cmap="gray")
+            axes[1, 1].imshow(label2rgb(w2_mask), cmap="gray")
+            axes[1, 2].imshow(label2rgb(w3_mask), cmap="gray")
+            axes[1, 3].imshow(label2rgb(w5_mask), cmap="gray")
+            plt.show()
+            
+            self.plot_counter += 1
+
+            # Save the plot to a file with a dynamic name
+            plt.savefig(f'your_plot_{self.plot_counter}.png')
+            
         # 3) Save
-        save_name_1 = str(self.save_path2 / set_mask_save_name(well_id, fov, 0))
-        save_name_2 = str(self.save_path2 / set_mask_save_name(well_id, fov, 1))
-        save_name_3 = str(self.save_path2 / set_mask_save_name(well_id, fov, 2))
-        save_name_4 = str(self.save_path2 / set_mask_save_name(well_id, fov, 4))
-
         sio.imsave(self.save_path / set_mask_save_name(well_id, fov, 0), w1_mask, check_contrast=False)
-        cv2.imwrite(save_name_1, label2rgb(w1_mask, bg_label=0)) #This Works. Try making another variable to hold the name
         sio.imsave(self.save_path / set_mask_save_name(well_id, fov, 1), w2_mask, check_contrast=False)
-        cv2.imwrite(save_name_2, label2rgb(w2_mask, bg_label=0))
         sio.imsave(self.save_path / set_mask_save_name(well_id, fov, 2), w3_mask, check_contrast=False)
-        cv2.imwrite(save_name_3, label2rgb(w3_mask, bg_label=0))
         sio.imsave(self.save_path / set_mask_save_name(well_id, fov, 4), w5_mask, check_contrast=False)
-        cv2.imwrite(save_name_4, label2rgb(w5_mask, bg_label=0))
-
-        # print(self.save_path2 / set_mask_save_name(well_id, fov, 0))
-        #
-        #
-        #
-        #
 
     def step1_preprocessing_and_w1w2_label_matching(self, img, w1_mask, w2_mask):
         """
@@ -590,7 +648,6 @@ class SegmentationPartII:
         cyto_slices = find_objects(cyto_mask, max_label=max_)
 
         for ii, (slc1, slc2) in enumerate(zip(nucleus_slices, cyto_slices)):
-            # print(ii)
             if slc1 is None or slc2 is None:
                 continue
             obj_label = ii + 1
@@ -703,7 +760,7 @@ class SegmentationPartII:
         # print("w2 vs w1", len(np.setdiff1d(unix2, unix1)))
         # print('\n')
         assert np.array_equal(unix2, unix5)
-        # print("end_line")
+
         return w3_mask, w5_mask
 
     def get_interect_area_over_w1_area_ratios(self, w1_mask, w2_mask):
@@ -762,4 +819,3 @@ class SegmentationPartII:
                 info_mat[ii, jj, 4] = area3 / area1
                 # print(ii, jj, area1, area2, area3)
         return info_mat
-
