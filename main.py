@@ -293,12 +293,12 @@ def main_worker(args):
         preview_run_loop(args, num_wells=2, sample_wellids=None)
     else:
         # segmentation of nucleus and cytoplasm
-        # step2_main_run_loop(args)
+        step2_main_run_loop(args)
         # matching nucleus and cytoplasm labels,
         # and segmenting nucleoli and mitochondria
-        # step3_main_run_loop(args)
+        step3_main_run_loop(args)
         # generates feature matrices as csv files
-        # step4_main_run_loop(args)
+        step4_main_run_loop(args)
         # generates DistanceMaps as xlsx files
         step5 = WellAggFeatureDistanceMetrics(args)
         step5.step5_main_run_loop()
