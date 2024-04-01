@@ -19,7 +19,12 @@ SPACe is fast, ~10X faster than [Cellprofiler](https://github.com/CellProfiler/C
 4) Light-weight Feature extraction: Shape, Intensity, and Texture Features
 5) Calcultes the Wassertein-Distance Map of each biological-well from the DMSO/Vehicle condition.
 
-## **Dependencies**
+## **Installation**
+
+### System requirements
+Linux, Windows and Mac OS are supported for running the code. At least 16GB of RAM is required to run the software. The software has been heavily tested on Windows 11 and Ubuntu 18.04 and less well-tested on Mac OS. Please open an issue if you have problems with installation.
+
+### Dependencies 
 SPACe relies on the following excellent packages (which are automatically installed with conda/pip if missing):
 
 cellpose==2.2
@@ -47,7 +52,7 @@ typing
 cmcrameri
 pyefd
 
-## **Installation instructions**
+### Instructions
 
 If you do not have anaconda installed on your computer, the first step is to install anaconda3 as follows:  
   1.	Download Anaconda: Go to the Anaconda website [Anaconda](https://www.anaconda.com/download) and download the Anaconda3 installer for your operating system (Windows, macOS, or Linux).
