@@ -19,6 +19,34 @@ SPACe is fast, ~10X faster than [Cellprofiler](https://github.com/CellProfiler/C
 4) Light-weight Feature extraction: Shape, Intensity, and Texture Features
 5) Calcultes the Wassertein-Distance Map of each biological-well from the DMSO/Vehicle condition.
 
+## **Dependencies**
+SPACe relies on the following excellent packages (which are automatically installed with conda/pip if missing):
+
+cellpose==2.2
+torch>=1.6
+torchvision
+pyclesperanto-prototype
+sympy
+tifffile
+numpy>=1.20.0
+scipy
+scikit-image>=0.20.0
+scikit-learn
+SimpleITK
+pandas>=2.0.0
+xlsxwriter
+openpyxl
+xlrd
+jupyter
+matplotlib
+seaborn
+plotly
+pathlib
+tqdm
+typing
+cmcrameri
+pyefd
+
 ## **Installation instructions**
 
 If you do not have anaconda installed on your computer, the first step is to install anaconda3 as follows:  
@@ -50,7 +78,7 @@ To install SPACe python package on a conda virtualenv called tensors:
     To install SPACe directly from github:
     ``` pip install git+https://github.com/dlabate/SPACe.git ```
   
-    **Option 2)**
+    **Option 2)** (< 3 minutes)
     To install SPACe locally on your computer and in order to be able to edit it, first download it from github to your computer, go to one directory above where your SPACe folder is
     downloaded/located/saved, through an anaconda3 terminal, the structure of the directory would look like this:
     ```
