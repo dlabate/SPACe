@@ -46,7 +46,7 @@ To install SPACe python package on a conda virtualenv called tensors:
   conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
 ```
 5.
-     **Option 1)**
+     **Option 1)** (< 3 minutes)
     To install SPACe directly from github:
     ``` pip install git+https://github.com/dlabate/SPACe.git ```
   
