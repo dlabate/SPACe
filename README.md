@@ -75,7 +75,7 @@ Remember, you will be able to modify the content of this package only if you ins
 
 ## **Reproducibility test for JUMP-MOA (BR00115125-31)**
 To test the pipeline on the JUMP Consortium datasets mentioned in the paper, follow these instructions:
-1. Download the datasets from the following link [BR00115125-31]([https://www.anaconda.com/download](https://cellpainting-gallery.s3.amazonaws.com/index.html#cpg0001-cellpainting-protocol/source_4/images/2020_08_11_Stain3_Yokogawa/images/)
+1. Download the datasets from the following link [BR00115125-31](https://cellpainting-gallery.s3.amazonaws.com/index.html#cpg0001-cellpainting-protocol/source_4/images/2020_08_11_Stain3_Yokogawa/images/)
 2. Place the platemap (already filled out and available [here](SPACe/Images_example/BR00115126/Jump_Consortium_Datasets_cpgmoa_AssayPlate/platemap.xlsx) in the same directory as your experiment_path (image folder). Please note that we have already set the best hyperparameters for running the pipeline on the JUMP-MOA dataset. Rename the image folder as follows: Jump_Consortium_Datasets_cpgmoa_AssayPlate.
 3. Follow the installation instructions in the [README.md](https://github.com/dlabate/SPACe/blob/master/README.md)
 4. Follow the instructions on how to run the program here: [run_SPACe.md](https://github.com/dlabate/SPACe/blob/master/run_SPACe.md)
