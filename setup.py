@@ -1,17 +1,17 @@
-#!/usr/bin/env python
+a#!/usr/bin/env python
 from setuptools import setup, find_packages
 from os import path
 
 here = path.abspath(path.dirname(__file__))
 
 setup(
-    name='cellpaint',
+    name='SPACe',
     version='10.0.0',
     python_requires='<11',
-    description='Implementation of the cellpainting project',
-    author='Kazem Safari',
+    description='Implementation of SPACe',
+    author='Kazem Safari, Michela Marini',
     author_email='mkazem.safari@gmail.com',
-    url='https://github.com/kazemSafari/cellpaint',
+    url='https://github.com/dlabate/SPACe',
     packages=find_packages(exclude=[]),
     install_requires=[
         'cellpose==2.2',
