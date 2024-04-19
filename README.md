@@ -27,30 +27,27 @@ Linux, Windows and Mac OS are supported for running the code. At least 16GB of R
 ### Dependencies 
 SPACe relies on the following excellent packages (which are automatically installed with conda/pip if missing):
 
-cellpose==2.2
-torch>=1.6
-torchvision
-pyclesperanto-prototype
-sympy
-tifffile
-numpy>=1.20.0
-scipy
-scikit-image>=0.20.0
-scikit-learn
-SimpleITK
-pandas>=2.0.0
-xlsxwriter
-openpyxl
-xlrd
-jupyter
-matplotlib
-seaborn
-plotly
-pathlib
-tqdm
-typing
-cmcrameri
-pyefd
+[cellpose](https://github.com/MouseLand/cellpose)==2.2 <br>
+[torch](https://github.com/pytorch/pytorch)>=1.6 <br>
+[torchvision](https://github.com/pytorch/vision) <br>
+[pycleranto](https://github.com/clEsperanto/pyclesperanto_prototype) <br>
+[sympy](https://github.com/sympy/sympy) <br>
+[tifffile](https://github.com/cgohlke/tifffile) <br>
+[numpy](https://github.com/numpy/numpy)>=1.20.0 <br>
+[scipy](https://github.com/scipy/scipy) <br>
+[scikit-image](https://github.com/scikit-image/scikit-image)>=0.20.0 <br>
+[scikit-learn](https://github.com/scikit-learn/scikit-learn) <br>
+[SimpleITK](https://github.com/SimpleITK/SimpleITK) <br>
+[pandas](https://github.com/pandas-dev/pandas)>=2.0.0 <br>
+[xlsxwriter](https://github.com/jmcnamara/XlsxWriter) <br>
+[openpyxl](https://github.com/theorchard/openpyxl) <br>
+[xlrd](https://github.com/python-excel/xlrd) <br>
+[jupyter](https://github.com/jupyter/notebook) <br>
+[matplotlib](https://github.com/matplotlib/matplotlib) <br>
+[plotly](https://github.com/plotly) <br>
+[pathlib](https://github.com/budlight/pathlib) <br>
+[tqdm](https://github.com/tqdm/tqdm) <br>
+[pyefd](https://github.com/hbldh/pyefd) <br>
 
 ### Instructions
 
