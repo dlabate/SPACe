@@ -308,8 +308,8 @@ def main_worker(args):
 # print(out_path)
 if __name__ == "__main__":
     
-    experiment_path = Path("/project/labate/CellPaint/Jump_Consortium_Datasets_cpg0001/2020_08_11_Stain3_Yokogawa")
-    experiment_folder = ['BR00115127']
+    experiment_path = Path("/Jump_Consortium_Datasets_cpg0001/2020_08_11_Stain3_Yokogawa")
+    experiment_folder = ['BR00115126']
     
     print(experiment_path)
     print(type(experiment_path))
