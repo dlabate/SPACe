@@ -123,8 +123,8 @@ def main_worker(args):
         step5.step5_main_run_loop()
 
 if __name__ == "__main__":
-    experiment_path = Path(r"path_to_your_experiment_folder_excluding_the_experiment_folder_itself")
-    experiment_folder = Path(r"your_experiment_folder")
+    experiment_path = Path("path_to_your_experiment_folder_excluding_the_experiment_folder_itself")
+    experiment_folder = ['your_experiment_folder']
     # entry point of the program is creating the necessary args
     start_time = time.time()
     args = Args(experiment=experiment_folder, main_path=experiment_path, mode="full").args  # mode="preview"
@@ -149,7 +149,7 @@ The structure of the directory of your data/images/plate has to be as follows:
 Experiment_Name\
 	Images_folder_Name\
 		Your image tiff files
-	Platemap.xlsx
+	platemap.xlsx
 ```
 
 0) The default settings of the program are based on the YOKOGAWA/PerkinElmer ```plate_protocol```, where
