@@ -81,12 +81,14 @@ def preview_run_loop(args, num_wells=None, sample_wellids=None, myclass=Segmenta
     args = set_custom_datasets_hyperparameters(args)
     ######################################################################
     # get img paths from wellids
-    if num_wells is not None:
+    if (num_wells is not None) and (sample_wellids is None):
         sample_wellids = random.sample(list(args.wellids), num_wells)
     elif (num_wells is not None) and (sample_wellids is not None):
         raise ValueError("num_wells and sample_wellids both can't be None!")
+    elif (num_wells is None) and (sample_wellids is not None):
+        sample_wellids = ''.join([wellid.upper() for wellid in sample_wellids])
     else:
-        sample_wellids = [wellid.upper() for wellid in sample_wellids]
+        sample_wellids = ''.join([wellid.upper() for wellid in sample_wellids])
     args.img_filepaths = sorted(filter(lambda x: np.isin(get_wellid(x, args), sample_wellids), args.img_filepaths))
     args.img_filename_keys, args.img_channels_filepaths, args.N = get_img_channel_groups(args)
     ############################################################################
