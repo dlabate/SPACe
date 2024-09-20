@@ -1,5 +1,7 @@
 # SPACe (Swift Phenotypic Analysis of Cells): an open-source, single cell analysis of Cell Painting data
 
+[![DOI](https://zenodo.org/badge/760841105.svg)](https://zenodo.org/doi/10.5281/zenodo.13821483)
+
 ## **Purpose and Use Case**
 
 
