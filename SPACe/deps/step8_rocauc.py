@@ -129,8 +129,8 @@ class ROCAUCAnalysis(FeaturePreprocessing, ROCAUC, PlateMapAnnot):
             #     distmap_df, self.feature_types, self.channels, batch_size=384)
             assert roc_curves.shape[2] == roc_aucs.shape[2] == distmap_df.shape[0]
             print(distmap_df.shape, roc_curves.shape, roc_diff_curves.shape)
-            #
-            # # TODO: Fix partI and partII using derivative and TBV as well.
+            
+           
             # # calculate roc_curves, and roc_aucss for visualization as well as hit calling
             # get median values per well
             roc_curves_median = groups.apply(lambda x: np.median(roc_curves[:, :, x.index, :], axis=2))
@@ -576,8 +576,7 @@ class ROCAUCAnalysis(FeaturePreprocessing, ROCAUC, PlateMapAnnot):
     def is_exp_multi_dose(self, unix_df):
         """Check whether the experiment has wells with multiple dosages (the same exact ones)
          for all none-DMSO treatments in its platemap."""
-        # TODO: Fix multi-dose: when there is only a single exact dose for all None-DMSO treatments,
-        #  the is_multi_dose variable must equal False. But this is not necessary at this point.
+        
         treatments = np.unique(unix_df["treatment"].to_numpy())
         if len(treatments) == 1:
             is_multi_dose = False
