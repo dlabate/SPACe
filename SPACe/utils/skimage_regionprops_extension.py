@@ -308,16 +308,7 @@ class RegionPropertiesExtension(RegionProperties):
         # handle the standard case
         mask_1 = ~mask_0
         correlation[mask_1] = cov[mask_1] / (std_i[mask_1] * std_j[mask_1])
-        ####################################################################################
-        # These are way too many features:
-        # 1) They take a long time to load
-        # 2) They can't fit into a small GPU
-        # haralick_features = tuple(np.vstack((contrast, dissimilarity, homogeneity, energy, correlation)).reshape(-1))
-        # return haralick_features
-        ####################################################################################
-        # I needed to manage the program,
-        # so instead I decided to use and store the haralick summary statistics instead!!!!
-        #####################################################################################
+        
         contrast = tuple(np.percentile(contrast, q=TEXTURE_PERCENTILES)) + \
                    (np.mean(contrast), np.std(contrast), median_abs_deviation(contrast, axis=None), )
         dissimilarity = tuple(np.percentile(dissimilarity, q=TEXTURE_PERCENTILES)) + \
