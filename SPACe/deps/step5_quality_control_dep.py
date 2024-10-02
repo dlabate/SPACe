@@ -163,7 +163,7 @@ class QualityControl(FeaturePreprocessing, ROCAUC, PlateMapAnnot):
         nrow, ncol = 16, 24
         rows = list(string.ascii_uppercase[:nrow])
         cols = [str(ii).zfill(2) for ii in np.arange(1, ncol+1)]
-        # TODO: Figure out a way to make it work in general, so that the missing wells are white
+        
         # rows = [f"{it[0]}" for it in self.args.wellids]
         # cols = [f"{it[1:]}" for it in self.args.wellids]
 
