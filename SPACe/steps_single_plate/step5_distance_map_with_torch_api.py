@@ -411,7 +411,7 @@ class StatsModel(nn.Module):
 class WellAggFeatureDistanceMetrics:
 
     analysis_step = 5
-    # TODO: Get the feature types from args so that it is automated
+   
     feature_types = ["Misc", "Shape", "Intensity", "Texture"]
 
     mad_mults = [3, 4, 5, 6, 7]
