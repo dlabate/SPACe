@@ -106,7 +106,7 @@ class FeatureDistMap(FeaturePreprocessing):
         #         (len(self.args.dosages) == 1 and len(self.args.densities) == 1 and len(self.args.treatments) == 1):
         # print("Found multiple Dosages ... Creating Distance Maps for a Dosage Response Benchmarking ...")
 
-        # TODO: investigate this problem later
+       
         # args.anchor_dosage = 0 if np.isin(0, args.anchor_dosage) else 0.01
         # anchor_dosage = np.amin(args.anchor_dosage)
         self.anchor_col = "dosage"
@@ -256,7 +256,7 @@ class FeatureDistMap(FeaturePreprocessing):
             self.calc_distance_matrix_wellwise(feats, anchor_feats, f"DMSO_{self.args.anchor_cellline}")
 
     def calc_treatments_across_celllines(self, replicate_exp_ids, anchor_exp_id):
-        # TODO: CHANGE AND MOVE THIS FUNCTION LATER!!!
+    
 
         print(replicate_exp_ids, anchor_exp_id)
         assert anchor_exp_id == replicate_exp_ids[0], """Always put the anchor as the first element."""
