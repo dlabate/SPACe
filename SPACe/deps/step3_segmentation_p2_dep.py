@@ -197,7 +197,7 @@ class ThresholdingSegmentation:
             w0_pieces = remove_small_objects_mod(w0_pieces, min_size=self.args.min_nucleus_size)
         y0, x0, y1, x1 = w10_props.bbox
         lw0_unix = np.unique(w0_pieces)
-        # # # TODO: Rethink this step maybe, this should never happen!
+        
         # if len(lw0_unix) == 0:  # remove bad cells
         #     print("the weird thing happened", lw0_unix)
         #     w1_mask[w1_mask == obj_label] = 0
@@ -289,7 +289,7 @@ class ThresholdingSegmentation:
         counter0, counter1 = unix0[-1], unix1[-1]
         # cnt1, cnt2 = 0, 0
         # total = len(unix1)
-        # TODO: Remove bad nuclues and cyto around edges using circularity, maybe
+       
         for jj in range(w1_max):
             out = self.region_props_loop(w0_mask, w1_mask, img, w1_objects, jj, counter0, counter1)
             if out is not None:
