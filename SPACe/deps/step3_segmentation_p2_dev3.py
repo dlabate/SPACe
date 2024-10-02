@@ -76,11 +76,7 @@ class SegmentationPartII(Base):
 
     w1_dil_struct = disk(4)
 
-    # TODO: To smoothen the boundary of each object (if possible and can be done quickly)
-    #  option 1) Can use the mode filter in PIL.
-    #  option 2) Can use the dilation and erosion ops in skimage. ✓
-    #  option 3) Can use the convex-hull op in skimage in skimage.
-    #  option 4) Apply median blur and use watershed
+
 
     def __init__(self, args):
         Base.__init__(self, args)
