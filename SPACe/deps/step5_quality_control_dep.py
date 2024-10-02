@@ -116,17 +116,7 @@ class QualityControl(FeaturePreprocessing, ROCAUC, PlateMapAnnot):
             model = DistCalcModel(features, self.feat_cols, self.analysis_step)
             model.eval()
 
-            # Profile the fucking memory usage!!!!
-            # for tt in range(20):
-            #     inputs = torch.randn(244, 1000*tt)
-            #     with profile(activities=[ProfilerActivity.CPU],
-            #                  profile_memory=True, record_shapes=True) as prof:
-            #         model(inputs)
-            #     print(prof.key_averages().table(sort_by="self_cpu_memory_usage", row_limit=20))
-            #     print('\n')
-
-            # if torch.cuda.is_available() and torch.cuda.device_count() > 1:
-            #     model = torch.nn.DataParallel(model)
+            
             model = model.to(self.device)
             dist_map = dist_calc_fn(model, data_loader, device=self.device, analysis_step=self.analysis_step)
 
