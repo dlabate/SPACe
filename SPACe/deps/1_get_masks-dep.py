@@ -54,7 +54,7 @@ def get_w0w1_masks_step1(w0_mask, w1_mask, img, args):
     counter0 = unix0[-1]
     counter1 = unix1[-1]
     
-    # TODO: Remove bad nuclues and cyto around edges using circularity
+    
     for ii in range(w1_max):
         if w1_objects[ii] is None:
             continue
@@ -386,8 +386,7 @@ def get_masks(idx, w0_mask_paths, w1_mask_paths, img_path_groups, args):
 
 
 def main_worker(args):
-    # TODO: Get number of channels as an independent separate step
-    # TODO: Check nucleus area at every single stage.
+    
     img_path_groups, w0_mask_paths, w1_mask_paths, args.num_channels = \
         get_matching_img_group_nuc_mask_cyto_mask(args.main_path, args.experiment, args.lab)
 
