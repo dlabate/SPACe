@@ -15,7 +15,7 @@ More information can be found in the [paper](https://www.nature.com/articles/s41
 ## **Citation**
 If you use **SPACe**, please cite the following publication: 
 
-Stossi, F., Singh, P.K., Marini, M., Safari, K., Szafran, A.T., Rivera Tostado, A., Candler, C.D., Mancini, M.G., Mosa, E.A., Bolt, M.J. and Labate, D., 2024. SPACe: an open-source, single-cell analysis of Cell Painting data. Nature Communications, 15(1), p.10170. 
+Stossi, F., Singh, P.K., Marini, M., Safari, K., Szafran, A.T., Rivera Tostado, A., Candler, C.D., Mancini, M.G., Mosa, E.A., Bolt, M.J. and Labate, D., 2024. SPACe: an open-source, single-cell analysis of Cell Painting data. Nature Communications, 15(1), p.10170. https://doi.org/10.1038/s41467-024-54264-4
 
 
 ## **Image Analysis Steps**
