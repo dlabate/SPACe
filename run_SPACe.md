@@ -177,7 +177,7 @@ Control
 ```
 2)	If you are not using the PerkinElmer plate protocol, or your images format is not 5 channels 
 You need to update the ```sort_key_for_imgs``` function inside the 
-```cellpaint/steps_single_plate /step0_args.py``` file. So that our cellpaint package knows 
+```cellpaint/steps_single_plate /step0_args.py``` file. So that our SPACe package knows 
 how to extract the necessary metadata, from each individual tiff file inside that image folder:
 
 ```
