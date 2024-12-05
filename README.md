@@ -1,15 +1,22 @@
-# SPACe (Swift Phenotypic Analysis of Cells): an open-source, single cell analysis of Cell Painting data
+# SPACe: an open-source, single cell analysis of Cell Painting data
 
 [![DOI](https://zenodo.org/badge/760841105.svg)](https://zenodo.org/doi/10.5281/zenodo.13821483)
 
 ## **Purpose and Use Case**
 
-
-SPACe is an image analysis package designed for high throughput phenotypic high throughput microscopy (96 and 384 well plates) based on the JUMP consortium Cell Painting (CP) protocol. The input usually is 5 fluorescence channels (C1 / C2 / C3 / C4 / C5) corresponding to specific CP fluorescent dies (DAPI / Concanavalin A / SYTO14 / WGA+phalloidin / Mitotracker). 
+SPACe (Swift Phenotypic Analysis of Cells) is an image analysis package designed for high throughput phenotypic high throughput microscopy (96 and 384 well plates) based on the JUMP consortium Cell Painting (CP) protocol. The input usually is 5 fluorescence channels (C1 / C2 / C3 / C4 / C5) corresponding to specific CP fluorescent dies (DAPI / Concanavalin A / SYTO14 / WGA+phalloidin / Mitotracker). 
 The package contains a user-friendly and tunable interface for cellular segmentation (check the preview.ipynb notebook).  It has two GPU-back ended options for the segmentation of the nucleus and cell: [cellpose](https://github.com/MouseLand/cellpose) and [pycleranto](https://github.com/clEsperanto/pyclesperanto_prototype).  
 It uses a novel method to match the segmentation of nucleus and cytoplasm, then uses the those two segmentation masks to segment the nucleoli and mitochondira as well.
 
 SPACe is fast, ~10X faster than [Cellprofiler](https://github.com/CellProfiler/CellProfiler), using a reasonably standard desktop and not using any cloud computing resources. It takes about 6-9 hours to analyze a full 384-well plate (~17000 2000X2000 pixel images) via pytorch/GPU as well as CPU-Multiprocessing for speedup.  The output is based on single cell data and is provided as canonical well-based summary statistics (mean, median) and as earth mover’s distance measurements of each well to a DMSO control reference distribution.  
+
+More information can be found in the [paper](https://www.nature.com/articles/s41467-024-54264-4).
+
+## **Citation**
+If you use **SPACe**, please cite the following publication: 
+
+Stossi, F., Singh, P.K., Marini, M., Safari, K., Szafran, A.T., Rivera Tostado, A., Candler, C.D., Mancini, M.G., Mosa, E.A., Bolt, M.J. and Labate, D., 2024. SPACe: an open-source, single-cell analysis of Cell Painting data. Nature Communications, 15(1), p.10170. 
+
 
 ## **Image Analysis Steps**
 
@@ -66,7 +73,7 @@ If you do not have anaconda installed on your computer, the first step is to ins
 
 To install SPACe python package on a conda virtualenv called tensors:
 
-1.	Install anacond3/miniconda3 on your windows or linux machine (see instruction above to download anaconda)
+1.	Install anaconda3/miniconda3 on your windows or linux machine (see instruction above to download anaconda)
 2.	Open an anaconda3 terminal (click on the search bar on your desktop and type anaconda. The Anaconda prompt will pop up):
 3.	Copy and paste the following instruction: 
     1.	``` conda create --name tensors python=3.10 --no-default-packages ```
