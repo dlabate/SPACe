@@ -12,6 +12,9 @@ SPACe is fast, ~10X faster than [Cellprofiler](https://github.com/CellProfiler/C
 
 More information can be found in the [paper](https://www.nature.com/articles/s41467-024-54264-4).
 
+## **License**
+This project is licensed under the [MIT License](https://github.com/dlabate/SPACe?tab=MIT-1-ov-file).
+
 ## **Citation**
 If you use **SPACe**, please cite the following publication: 
 
