@@ -1,6 +1,6 @@
 **Necessary Modifications Before running the program**
 
-You can find the platemap Excel template [here](https://github.com/dlabate/SPACe/blob/main/cellpaint/platemap_template.xlsx)
+You can find the platemap Excel template [here](https://github.com/dlabate/SPACe/blob/main/platemap_template.xlsx)
 
 1) make sure the platemap Excel file is filled-in properly,
 and is in the same directory as your ```experiment_path``` which is the path to your images/experiment folder.
